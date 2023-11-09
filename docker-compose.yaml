@@ -21,3 +21,13 @@ services:
     ports:
       - "${PRODUCTS_PORT}:${PRODUCTS_PORT}"
     command: python /app/products/manage.py runserver 0.0.0.0:${PRODUCTS_PORT}
+
+  proxy:
+    build: proxy
+    environment:
+      - PROXY_PORT=${PROXY_PORT}
+    volumes:
+      - ./proxy:/app
+    ports:
+      - "${PROXY_PORT}:${PROXY_PORT}"
+    command: python app.py

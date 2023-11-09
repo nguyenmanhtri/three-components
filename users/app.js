@@ -1,10 +1,14 @@
 const express = require('express');
 const app = express();
 
-const port = process.env.USERS_PORT;
+const port = process.env.USERS_PORT || 3000;
 
 app.get('/', (req, res) => {
-   res.send('Hello World!');
+   console.log('===== Received request =====');
+   const message = {
+      'message': 'hello world',
+   }
+   res.send(message);
 });
 
 app.listen(port, () => {
