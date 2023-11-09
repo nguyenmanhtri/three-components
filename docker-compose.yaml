@@ -1,0 +1,13 @@
+version: '3'
+services:
+  users:
+    build: users
+    env_file: .env
+    ports:
+      - "${USERS_PORT}:${USERS_PORT}"
+    volumes:
+      - ./users:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm start
