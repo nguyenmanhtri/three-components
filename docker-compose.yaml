@@ -10,6 +10,7 @@ services:
     volumes:
       - ./users:/usr/src/app
       - /usr/src/app/node_modules
+      - ./users/data/users.sqlite3:/usr/src/app/data/users.sqlite3
     command: npm start
 
   products:
@@ -31,3 +32,6 @@ services:
     ports:
       - "${PROXY_PORT}:${PROXY_PORT}"
     command: python app.py
+
+# volumes:
+#   sqlite3-data:
