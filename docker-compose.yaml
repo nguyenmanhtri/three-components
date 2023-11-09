@@ -3,11 +3,21 @@ services:
   users:
     build: users
     env_file: .env
+    environment:
+      - NODE_ENV=development
     ports:
       - "${USERS_PORT}:${USERS_PORT}"
     volumes:
       - ./users:/usr/src/app
       - /usr/src/app/node_modules
-    environment:
-      - NODE_ENV=development
     command: npm start
+
+  products:
+    build: products
+    environment:
+      - DEBUG=1
+    volumes:
+      - ./products:/app
+    ports:
+      - "${PRODUCTS_PORT}:${PRODUCTS_PORT}"
+    command: python /app/products/manage.py runserver 0.0.0.0:${PRODUCTS_PORT}
