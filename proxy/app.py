@@ -1,11 +1,9 @@
 import os
 import requests
-import logging
 
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-logger = logging.getLogger(__name__)
 API_URL = "http://users:3000"
 
 
@@ -15,9 +13,9 @@ def hello():
 
 
 @app.route('/', defaults={'path': ''})
-@app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/<path:path>', methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
 def proxy(path):
-    logger.info(f'===== Forward request to {path} =====')
+    app.logger.info(f'===== Forward request to {path} =====')
     resp = requests.request(
         method=request.method,
         url=f"{API_URL}/{path}",
@@ -26,14 +24,11 @@ def proxy(path):
         cookies=request.cookies,
         allow_redirects=False)
 
-    headers = [(name, value) for (name, value) in resp.raw.headers.items()]
     response = jsonify(resp.json())
     response.status_code = resp.status_code
-    for header in headers:
-        response.headers.add(header[0], header[1])
 
     return response
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=os.environ['PROXY_PORT'])
+    app.run(host='0.0.0.0', port=os.environ['PROXY_PORT'], debug=True)
